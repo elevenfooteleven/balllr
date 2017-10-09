@@ -19,8 +19,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 export default class App extends React.Component {
   state = {
     shots: [],
-    shotsComments: [],
-    dataLoaded: false
+    shotsComments: []
   };
 
   componentDidMount() {
@@ -28,10 +27,13 @@ export default class App extends React.Component {
     const accessToken =
       "34ae2608185d1faab2f5af942cc6da77170fae669272146bd82fe0fb6a012788";
 
-    fetch(`${apiEndpoint}?page=1&per_page=5&access_token=${accessToken}`)
+    fetch(`${apiEndpoint}?page=1&per_page=30&access_token=${accessToken}`)
       .then(response => response.json())
       .then(responseJson => {
         this.setState({ shots: responseJson }, () => {
+          this.dataLoaded = true;
+          this.animateMiniCards();
+          responseJson.map(shot => Image.prefetch(shot.images.hidpi));
           responseJson.map(shot =>
             fetch(
               `${apiEndpoint}/${shot.id}/comments?access_token=${accessToken}`
@@ -44,12 +46,13 @@ export default class App extends React.Component {
           );
         });
       })
-      .catch(() =>
+      .catch(error => {
+        console.log(error);
         Alert.alert(
           "Meh Heh!",
           "Looks like we hit Dribbble’s API rate limit. Load this app again in 1000ms."
-        )
-      );
+        );
+      });
 
     Animated.loop(
       Animated.timing(this.dribbbleBallAnimatedVal, {
@@ -68,6 +71,7 @@ export default class App extends React.Component {
   cardsFinishedAnimating = false;
   // Dribbble loading animation
   dribbbleBallAnimatedVal = new Animated.Value(0);
+  dataLoaded = false;
 
   loadingView = () => (
     <View
@@ -149,9 +153,6 @@ export default class App extends React.Component {
 
   animateCardsToFinalPosition = () => {
     this.cardsFinishedAnimating = true;
-    this.setState({
-      dataLoaded: true
-    });
 
     const animationsToRunInParallel = this.fakeArray.map((wat, i) =>
       Animated.spring(this.cardTopVal[i], {
@@ -205,6 +206,8 @@ export default class App extends React.Component {
                 useNativeDriver: true
               }
             )}
+            removeClippedSubviews={true}
+            initialNumToRender={3}
             data={this.state.shots}
             keyExtractor={item => item.id}
             renderItem={({ item, index }) => (
@@ -214,13 +217,12 @@ export default class App extends React.Component {
                 scrollX={this.scrollX}
                 cardTopAnimatedVal={this.cardTopVal[index]}
                 cardTitleOpacityAnimatedVal={this.cardOpacityVal}
-                runFunction={this.animateMiniCards}
                 finishedAnimating={this.cardsFinishedAnimating}
               />
             )}
           />
         </Animated.View>
-        {!this.state.dataLoaded && this.loadingView()}
+        {!this.dataLoaded && this.loadingView()}
       </View>
     );
   }
