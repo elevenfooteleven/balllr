@@ -207,9 +207,11 @@ export default class App extends React.Component {
               }
             )}
             removeClippedSubviews={true}
-            initialNumToRender={3}
+            initialNumToRender={1}
+            maxToRenderPerBatch={2}
             data={this.state.shots}
             keyExtractor={item => item.id}
+            windowSize={3}
             renderItem={({ item, index }) => (
               <Card
                 item={item}
