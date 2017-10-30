@@ -16,31 +16,19 @@ const { width: deviceWidth } = Dimensions.get("window");
 let COUNTER = 0;
 
 export default class Card extends React.Component {
-
   shouldComponentUpdate(nextProps, nextState) {
     return this.props.index != nextProps.index; // use PureRenderComponent
   }
 
   render() {
-    const {
-      item,
-      index,
-      cardTopAnimatedVal,
-      cardTitleOpacityAnimatedVal
-    } = this.props;
+    const { item, index } = this.props;
 
     return (
-      <ScrollView
-        style={{ overflow: "visible" }}
-        contentContainerStyle={{ paddingBottom: 40 }}
-      >
+      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
         <Animated.View
           style={{
-            opacity: cardTitleOpacityAnimatedVal,
-            height: 64,
-            marginTop: 20 + 24,
-            marginBottom: 24,
-            marginLeft: 24,
+            width: deviceWidth,
+            padding: 24,
             flexDirection: "row",
             alignItems: "center"
           }}
@@ -96,8 +84,7 @@ export default class Card extends React.Component {
         </Animated.View>
         <Animated.View
           style={{
-            width: deviceWidth,
-            transform: [{ translateY: index <= 2 ? cardTopAnimatedVal : 0 }]
+            width: deviceWidth
           }}
         >
           <Animated.View
@@ -129,7 +116,11 @@ export default class Card extends React.Component {
             >
               <Image
                 style={{ ...StyleSheet.absoluteFillObject }}
-                source={{ uri: item.images.hidpi }}
+                source={{
+                  uri: item.images.hidpi
+                    ? item.images.hidpi
+                    : item.images.normal
+                }}
               />
             </View>
             <View
@@ -139,22 +130,38 @@ export default class Card extends React.Component {
                 backgroundColor: "#ccc"
               }}
             />
-            <View style={{ marginVertical: 24, marginHorizontal: 16 }}>
-              {item.description && (
+
+            {item.description && (
+              <View
+                style={{
+                  marginVertical: 24,
+                  marginHorizontal: 16
+                }}
+              >
                 <View>
                   <HTMLView
                     stylesheet={styles}
-                    value={item.description.replace(/\n\n/g, "\n")}
+                    value={item.description.replace(/\n\n/g, "")}
                   />
                 </View>
-              )}
-            </View>
+              </View>
+            )}
+            {!item.description && (
+              <View
+                style={{
+                  marginVertical: 24,
+                  marginHorizontal: 16
+                }}
+              >
+                <Text style={styles.p}>No description ¯\_(ツ)_/¯</Text>
+              </View>
+            )}
           </Animated.View>
         </Animated.View>
       </ScrollView>
     );
   }
-};
+}
 
 const styles = StyleSheet.create({
   p: {
