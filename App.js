@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -7,13 +7,13 @@ import {
   Dimensions,
   Image,
   FlatList,
-  Alert
-} from "react-native";
+  Alert,
+} from 'react-native';
 
-import secret from "./secret";
-import Card from "./Card";
+import secret from './secret';
+import Card from './Card';
 
-const { width: deviceWidth, height: deviceHeight } = Dimensions.get("window");
+const { width: deviceWidth, height: deviceHeight } = Dimensions.get('window');
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -21,14 +21,18 @@ export default class App extends React.Component {
   state = {
     shots: [],
     shotsComments: [],
-    dataLoaded: false
+    dataLoaded: false,
   };
 
+  _scrollX = new Animated.Value(0);
+
   componentDidMount() {
-    const apiEndpoint = "https://api.dribbble.com/v1/shots";
+    const apiEndpoint = 'https://api.dribbble.com/v1/shots';
     const accessToken = secret.accessToken;
 
-    fetch(`${apiEndpoint}?page=1&per_page=30&access_token=${accessToken}`)
+    fetch(
+      `${apiEndpoint}?page=1&timeframe=month&per_page=50&access_token=${accessToken}`,
+    )
       .then(response => response.json())
       .then(responseJson => {
         this.setState({ shots: responseJson }, () => {
@@ -49,8 +53,8 @@ export default class App extends React.Component {
       .catch(error => {
         console.log(error);
         Alert.alert(
-          "Meh Heh!",
-          "Looks like we hit Dribbble’s API rate limit. Load this app again in 1000ms."
+          'Meh Heh!',
+          'Looks like we hit Dribbble’s API rate limit. Load this app again in 1000ms.',
         );
       });
 
@@ -58,8 +62,8 @@ export default class App extends React.Component {
       Animated.timing(this.dribbbleBallAnimatedVal, {
         toValue: 1,
         duration: 500,
-        useNativeDriver: true
-      })
+        useNativeDriver: true,
+      }),
     ).start();
   }
 
@@ -69,10 +73,10 @@ export default class App extends React.Component {
   loadingView = () => (
     <View
       style={{
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: "transparent"
+        backgroundColor: 'transparent',
       }}
     >
       <Animated.View
@@ -83,48 +87,48 @@ export default class App extends React.Component {
             {
               scaleX: this.dribbbleBallAnimatedVal.interpolate({
                 inputRange: [0, 0.5, 0.75, 1],
-                outputRange: [1, 1.1, 1, 1]
-              })
+                outputRange: [1, 1.1, 1, 1],
+              }),
             },
             {
               scaleY: this.dribbbleBallAnimatedVal.interpolate({
                 inputRange: [0, 0.5, 0.75, 1],
-                outputRange: [1, 1, 1.1, 1]
-              })
+                outputRange: [1, 1, 1.1, 1],
+              }),
             },
             {
               translateY: this.dribbbleBallAnimatedVal.interpolate({
                 inputRange: [0, 0.25, 0.3, 1],
-                outputRange: [0, 20, 20, 0]
-              })
-            }
-          ]
+                outputRange: [0, 20, 20, 0],
+              }),
+            },
+          ],
         }}
       >
-        <Image source={require("./dribbble-ball.png")} />
+        <Image source={require('./dribbble-ball.png')} />
       </Animated.View>
       <Animated.View
         style={{
           marginBottom: 8,
           opacity: this.dribbbleBallAnimatedVal.interpolate({
             inputRange: [0, 0.25, 1],
-            outputRange: [0.15, 0.3, 0.15]
+            outputRange: [0.15, 0.3, 0.15],
           }),
           transform: [
             {
               scaleX: this.dribbbleBallAnimatedVal.interpolate({
                 inputRange: [0, 0.25, 1],
-                outputRange: [4, 6, 4]
-              })
-            }
+                outputRange: [4, 6, 4],
+              }),
+            },
           ],
           width: 4,
           height: 4,
           borderRadius: 2,
-          backgroundColor: "black"
+          backgroundColor: 'black',
         }}
       />
-      <Text style={{ color: "#EB4C89" }}>Loading shots!</Text>
+      <Text style={{ color: '#EB4C89' }}>Loading shots!</Text>
     </View>
   );
 
@@ -134,37 +138,37 @@ export default class App extends React.Component {
     }
 
     return (
-      <View style={{ paddingTop: 20, backgroundColor: "#f4f4f4" }}>
+      <View style={{ paddingTop: 20, backgroundColor: '#ea4c89' }}>
         <Animated.View
           style={{
-            ...StyleSheet.absoluteFillObject
+            ...StyleSheet.absoluteFillObject,
           }}
         />
-        <Animated.View
-          style={{
-            width: deviceWidth,
-            height: deviceHeight
-          }}
-        >
-          <AnimatedFlatList
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            style={{ overflow: "visible" }}
-            removeClippedSubviews={true}
-            initialNumToRender={1}
-            maxToRenderPerBatch={2}
-            data={this.state.shots}
-            keyExtractor={item => item.id}
-            windowSize={3}
-            renderItem={({ item, index }) => (
-              <Card
-                item={item}
-                index={index}
-              />
-            )}
-          />
-        </Animated.View>
+
+        <AnimatedFlatList
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          // style={{ overflow: 'hidden' }}
+          // removeClippedSubviews={true}
+          initialNumToRender={1}
+          maxToRenderPerBatch={2}
+          scrollEventThrottle={1}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: this._scrollX } } }],
+            { useNativeDriver: true },
+          )}
+          data={this.state.shots}
+          keyExtractor={item => item.id}
+          windowSize={3}
+          renderItem={({ item, index }) => (
+            <Card
+              item={item}
+              index={index}
+              animatedScrollValue={this._scrollX}
+            />
+          )}
+        />
       </View>
     );
   }
