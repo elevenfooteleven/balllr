@@ -16,18 +16,12 @@ const { width: deviceWidth, height: deviceHeight } = Dimensions.get('window');
 let COUNTER = 0;
 
 export default class Card extends React.Component {
-
   shouldComponentUpdate(nextProps, nextState) {
-    return this.props.defer !== nextProps.defer || 
-      this.props.item.id !== nextProps.item.id;
-  }
-
-  getImage() {
-    return this.props.item.images.hdpi ? this.props.item.images.hdpi : this.props.item.images.normal;
+    return this.props.index != nextProps.index; // use PureRenderComponent
   }
 
   render() {
-    const { item, index, animatedScrollValue, defer } = this.props;
+    const { item, index, animatedScrollValue } = this.props;
 
     return (
       <Animated.View
@@ -244,7 +238,9 @@ export default class Card extends React.Component {
                     ],
                   }}
                   source={{
-                    uri: defer ? item.images.teaser : this.getImage(),
+                    uri: item.images.teaser
+                      ? item.images.teaser
+                      : item.images.teaser,
                   }}
                 />
               </View>

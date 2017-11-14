@@ -22,6 +22,7 @@ export default class App extends React.Component {
     shots: [],
     shotsComments: [],
     dataLoaded: false,
+    animating: false,
   };
 
   _scrollX = new Animated.Value(0);
@@ -161,8 +162,11 @@ export default class App extends React.Component {
           data={this.state.shots}
           keyExtractor={item => item.id}
           windowSize={3}
+          onMomentumScrollBegin={() => this.setState({ animating: true })}
+          onMomentumScrollEnd={() => this.setState({ animating: false })}
           renderItem={({ item, index }) => (
             <Card
+              defer={this.state.animating}
               item={item}
               index={index}
               animatedScrollValue={this._scrollX}
