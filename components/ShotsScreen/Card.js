@@ -228,7 +228,6 @@ export default class Card extends React.Component {
                     justifyContent: 'center',
                   }}
                 >
-                  <ActivityIndicator color="white" animating size="large" />
                   <Animated.Image
                     style={{
                       ...StyleSheet.absoluteFillObject,
@@ -250,6 +249,7 @@ export default class Card extends React.Component {
                       uri: item.images.teaser,
                     }}
                   />
+                  <ActivityIndicator color="white" animating size="large" />
                   {!lowQuality &&
                     <Animated.Image
                       style={{
