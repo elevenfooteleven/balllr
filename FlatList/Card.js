@@ -238,9 +238,9 @@ export default class Card extends React.Component {
                     ],
                   }}
                   source={{
-                    uri: item.images.hidpi
-                      ? item.images.hidpi
-                      : item.images.normal,
+                    uri: item.images.teaser
+                      ? item.images.teaser
+                      : item.images.teaser,
                   }}
                 />
               </View>
