@@ -26,10 +26,13 @@ export default class App extends React.Component {
   };
 
   _scrollX = new Animated.Value(0);
+  animatingListener;
 
   componentDidMount() {
     const apiEndpoint = 'https://api.dribbble.com/v1/shots';
     const accessToken = secret.accessToken;
+
+    this.animatingListener = this._scrollX.addListener(() => this.setState({ animating: true }));
 
     fetch(
       `${apiEndpoint}?page=1&timeframe=month&per_page=50&access_token=${accessToken}`,
@@ -66,6 +69,10 @@ export default class App extends React.Component {
         useNativeDriver: true,
       }),
     ).start();
+  }
+
+  componentWillUnmount() {
+    this._scrollX.removeEventListener(this.animatingListener);
   }
 
   // Dribbble loading animation
@@ -162,7 +169,6 @@ export default class App extends React.Component {
           data={this.state.shots}
           keyExtractor={item => item.id}
           windowSize={3}
-          onMomentumScrollBegin={() => this.setState({ animating: true })}
           onMomentumScrollEnd={() => this.setState({ animating: false })}
           renderItem={({ item, index }) => (
             <Card
