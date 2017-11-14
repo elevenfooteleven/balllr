@@ -13,7 +13,11 @@ import HTMLView from 'react-native-htmlview';
 import moment from 'moment';
 
 const { width: deviceWidth, height: deviceHeight } = Dimensions.get('window');
-let COUNTER = 0;
+const icons = {
+  views: require('./views.png'),
+  comments: require('./comments.png'),
+  likes: require('./likes.png'),
+};
 
 export default class Card extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
@@ -234,19 +238,101 @@ export default class Card extends React.Component {
                   }}
                 />
               </View>
+              <View style={styles.hairlineBorder} />
               <View
                 style={{
-                  width: deviceWidth - 16,
-                  height: StyleSheet.hairlineWidth,
-                  backgroundColor: '#ccc',
+                  flexDirection: 'row',
+                  paddingVertical: 8,
+                  paddingHorizontal: 16,
                 }}
-              />
-
+              >
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    style={{
+                      width: 24,
+                      resizeMode: 'contain',
+                      marginRight: 4,
+                      tintColor: '#8F8E94',
+                    }}
+                    source={icons.views}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      letterSpacing: -0.078,
+                      color: '#8F8E94',
+                    }}
+                  >
+                    {item.views_count}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Image
+                    style={{
+                      width: 24,
+                      resizeMode: 'contain',
+                      marginRight: 4,
+                      tintColor: '#8F8E94',
+                    }}
+                    source={icons.comments}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      letterSpacing: -0.078,
+                      color: '#8F8E94',
+                    }}
+                  >
+                    {item.comments_count}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                  }}
+                >
+                  <Image
+                    style={{
+                      width: 24,
+                      resizeMode: 'contain',
+                      marginRight: 4,
+                      tintColor: '#8F8E94',
+                    }}
+                    source={icons.likes}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      letterSpacing: -0.078,
+                      color: '#8F8E94',
+                    }}
+                  >
+                    {item.likes_count}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.hairlineBorder} />
               {item.description &&
                 <View
                   style={{
-                    marginVertical: 24,
-                    marginHorizontal: 16,
+                    marginVertical: 16,
+                    paddingHorizontal: 16,
                   }}
                 >
                   <View>
@@ -282,5 +368,10 @@ const styles = StyleSheet.create({
   },
   a: {
     color: '#ea4c89',
+  },
+  hairlineBorder: {
+    width: deviceWidth - 16,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#ccc',
   },
 });
