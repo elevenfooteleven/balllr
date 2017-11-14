@@ -13,7 +13,11 @@ import HTMLView from 'react-native-htmlview';
 import moment from 'moment';
 
 const { width: deviceWidth, height: deviceHeight } = Dimensions.get('window');
-let COUNTER = 0;
+const icons = {
+  views: require('./views.png'),
+  comments: require('./comments.png'),
+  likes: require('./likes.png'),
+};
 
 export default class Card extends React.Component {
 
@@ -32,17 +36,9 @@ export default class Card extends React.Component {
     return (
       <Animated.View
         style={{
-          // marginTop: 16,
           marginHorizontal: 8,
           height: deviceHeight - 20,
           borderRadius: 24,
-          // shadowColor: 'black',
-          // shadowOpacity: 0.2,
-          // shadowRadius: 8,
-          // shadowOffset: {
-          //   width: 0,
-          //   height: 1,
-          // },
           transform: [
             { perspective: 800 },
             {
@@ -111,7 +107,6 @@ export default class Card extends React.Component {
               shouldRasterizeIOS
               renderToHardwareTextureAndroid
               style={{
-                // marginHorizontal: 8,
                 width: deviceWidth - 16,
               }}
             >
@@ -201,7 +196,9 @@ export default class Card extends React.Component {
                         backgroundColor: 'transparent',
                       }}
                     >
-                      <Text>{item.user.name}</Text>
+                      <Text>
+                        {item.user.name}
+                      </Text>
                     </Text>
                     <Text
                       style={{
@@ -221,9 +218,6 @@ export default class Card extends React.Component {
                   width: deviceWidth - 16,
                   height: 600 / 800 * deviceWidth - 16,
                   backgroundColor: '#4A4A52',
-                  // borderTopLeftRadius: 24,
-                  // borderTopRightRadius: 24,
-                  // overflow: 'hidden',
                 }}
               >
                 <Animated.Image
@@ -248,19 +242,101 @@ export default class Card extends React.Component {
                   }}
                 />
               </View>
+              <View style={styles.hairlineBorder} />
               <View
                 style={{
-                  width: deviceWidth - 16,
-                  height: StyleSheet.hairlineWidth,
-                  backgroundColor: '#ccc',
+                  flexDirection: 'row',
+                  paddingVertical: 8,
+                  paddingHorizontal: 16,
                 }}
-              />
-
-              {item.description && (
+              >
                 <View
                   style={{
-                    marginVertical: 24,
-                    marginHorizontal: 16,
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    style={{
+                      width: 24,
+                      resizeMode: 'contain',
+                      marginRight: 4,
+                      tintColor: '#8F8E94',
+                    }}
+                    source={icons.views}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      letterSpacing: -0.078,
+                      color: '#8F8E94',
+                    }}
+                  >
+                    {item.views_count}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Image
+                    style={{
+                      width: 24,
+                      resizeMode: 'contain',
+                      marginRight: 4,
+                      tintColor: '#8F8E94',
+                    }}
+                    source={icons.comments}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      letterSpacing: -0.078,
+                      color: '#8F8E94',
+                    }}
+                  >
+                    {item.comments_count}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                  }}
+                >
+                  <Image
+                    style={{
+                      width: 24,
+                      resizeMode: 'contain',
+                      marginRight: 4,
+                      tintColor: '#8F8E94',
+                    }}
+                    source={icons.likes}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      letterSpacing: -0.078,
+                      color: '#8F8E94',
+                    }}
+                  >
+                    {item.likes_count}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.hairlineBorder} />
+              {item.description &&
+                <View
+                  style={{
+                    marginVertical: 16,
+                    paddingHorizontal: 16,
                   }}
                 >
                   <View>
@@ -269,9 +345,8 @@ export default class Card extends React.Component {
                       value={item.description.replace(/\n\n/g, '')}
                     />
                   </View>
-                </View>
-              )}
-              {!item.description && (
+                </View>}
+              {!item.description &&
                 <View
                   style={{
                     marginVertical: 24,
@@ -279,8 +354,7 @@ export default class Card extends React.Component {
                   }}
                 >
                   <Text style={styles.p}>No description ¯\_(ツ)_/¯</Text>
-                </View>
-              )}
+                </View>}
             </Animated.View>
           </Animated.View>
         </Animated.ScrollView>
@@ -298,5 +372,10 @@ const styles = StyleSheet.create({
   },
   a: {
     color: '#ea4c89',
+  },
+  hairlineBorder: {
+    width: deviceWidth - 16,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#ccc',
   },
 });
