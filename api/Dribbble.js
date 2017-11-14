@@ -14,7 +14,6 @@ export const fetchShotsAndComments = () =>
   //         }))
   //       ))
   //   )
-  //   .then(data => { console.log(JSON.stringify(data)); return data })
   //   .catch(error => {
   //     console.log(error);
   //     Alert.alert(
