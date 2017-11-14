@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 
-import secret from './secret';
+import secret from '../secret';
 import Card from './Card';
 
 const { width: deviceWidth, height: deviceHeight } = Dimensions.get('window');
