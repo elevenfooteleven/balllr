@@ -24,6 +24,7 @@ export default class App extends React.Component {
     loading: true,
     animating: false,
     scrollX: new Animated.Value(0),
+    activeIndex: 0,
   };
 
   componentDidMount() {
@@ -34,6 +35,15 @@ export default class App extends React.Component {
         loading: false,
       });
     });
+  }
+
+  onScrollEnd = (e) => {
+    const contentOffset = e.nativeEvent.contentOffset.x;
+    const viewSize = deviceWidth;
+
+    // Divide the content offset by the size of the view to see which page is visible
+    const activeIndex = Math.floor(contentOffset / viewSize) || 0;
+    this.setState({ activeIndex });
   }
 
   render() {
@@ -67,12 +77,11 @@ export default class App extends React.Component {
           maxToRenderPerBatch={2}
           windowSize={3}
 
-          onScrollBeginDrag={() => this.setState({ animating: true })}
-          onMomentumScrollEnd={() => this.setState({ animating: false })}
+          onMomentumScrollEnd={this.onScrollEnd}
 
           renderItem={({ item, index }) => (
             <Card
-              lowQuality={this.state.animating}
+              lowQuality={index !== this.state.activeIndex}
               item={item}
               index={index}
               animatedScrollValue={this.state.scrollX}
