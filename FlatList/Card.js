@@ -26,17 +26,9 @@ export default class Card extends React.Component {
     return (
       <Animated.View
         style={{
-          // marginTop: 16,
           marginHorizontal: 8,
           height: deviceHeight - 20,
           borderRadius: 24,
-          // shadowColor: 'black',
-          // shadowOpacity: 0.2,
-          // shadowRadius: 8,
-          // shadowOffset: {
-          //   width: 0,
-          //   height: 1,
-          // },
           transform: [
             { perspective: 800 },
             {
@@ -105,7 +97,6 @@ export default class Card extends React.Component {
               shouldRasterizeIOS
               renderToHardwareTextureAndroid
               style={{
-                // marginHorizontal: 8,
                 width: deviceWidth - 16,
               }}
             >
@@ -195,7 +186,9 @@ export default class Card extends React.Component {
                         backgroundColor: 'transparent',
                       }}
                     >
-                      <Text>{item.user.name}</Text>
+                      <Text>
+                        {item.user.name}
+                      </Text>
                     </Text>
                     <Text
                       style={{
@@ -215,9 +208,6 @@ export default class Card extends React.Component {
                   width: deviceWidth - 16,
                   height: 600 / 800 * deviceWidth - 16,
                   backgroundColor: '#4A4A52',
-                  // borderTopLeftRadius: 24,
-                  // borderTopRightRadius: 24,
-                  // overflow: 'hidden',
                 }}
               >
                 <Animated.Image
@@ -252,7 +242,7 @@ export default class Card extends React.Component {
                 }}
               />
 
-              {item.description && (
+              {item.description &&
                 <View
                   style={{
                     marginVertical: 24,
@@ -265,9 +255,8 @@ export default class Card extends React.Component {
                       value={item.description.replace(/\n\n/g, '')}
                     />
                   </View>
-                </View>
-              )}
-              {!item.description && (
+                </View>}
+              {!item.description &&
                 <View
                   style={{
                     marginVertical: 24,
@@ -275,8 +264,7 @@ export default class Card extends React.Component {
                   }}
                 >
                   <Text style={styles.p}>No description ¯\_(ツ)_/¯</Text>
-                </View>
-              )}
+                </View>}
             </Animated.View>
           </Animated.View>
         </Animated.ScrollView>

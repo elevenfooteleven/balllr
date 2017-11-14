@@ -70,7 +70,7 @@ export default class App extends React.Component {
   // Dribbble loading animation
   dribbbleBallAnimatedVal = new Animated.Value(0);
 
-  loadingView = () => (
+  loadingView = () =>
     <View
       style={{
         alignItems: 'center',
@@ -129,8 +129,7 @@ export default class App extends React.Component {
         }}
       />
       <Text style={{ color: '#EB4C89' }}>Loading shots!</Text>
-    </View>
-  );
+    </View>;
 
   render() {
     if (!this.state.dataLoaded) {
@@ -149,8 +148,6 @@ export default class App extends React.Component {
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
-          // style={{ overflow: 'hidden' }}
-          // removeClippedSubviews={true}
           initialNumToRender={1}
           maxToRenderPerBatch={2}
           scrollEventThrottle={1}
@@ -161,13 +158,12 @@ export default class App extends React.Component {
           data={this.state.shots}
           keyExtractor={item => item.id}
           windowSize={3}
-          renderItem={({ item, index }) => (
+          renderItem={({ item, index }) =>
             <Card
               item={item}
               index={index}
               animatedScrollValue={this._scrollX}
-            />
-          )}
+            />}
         />
       </View>
     );
