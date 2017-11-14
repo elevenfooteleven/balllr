@@ -1,5 +1,5 @@
-// import ScrollView from './ScrollView';
+// import ScrollView from './components/ScrollView';
 // export default ScrollView;
 
-import FlatList from './FlatList';
+import FlatList from './components/FlatList';
 export default FlatList;
